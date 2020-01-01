@@ -3,9 +3,12 @@ package com.example.tab_widget;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -15,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -64,11 +70,20 @@ public class ListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.contact_listview, parent, false);
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById((R.id.contact_phto));
+
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.contact_photo);
         TextView nameView = (TextView) convertView.findViewById(R.id.contact_name);
         TextView phoneNumView = (TextView) convertView.findViewById(R.id.contact_phonenum);
 
-        imageView.setImageBitmap(loadContactPhoto(mContext.getContentResolver(),m_oData.get(position).getPerson_id(),m_oData.get(position).getPhoto_id()));
+        Bitmap tmp = loadContactPhoto(mContext.getContentResolver(),m_oData.get(position).getPerson_id(),m_oData.get(position).getPhoto_id());
+
+        if (tmp == null){
+            Drawable drawable = mContext.getResources().getDrawable(R.mipmap.man);
+            Bitmap bitmap = resizingBitmap(((BitmapDrawable)drawable).getBitmap());
+            imageView.setImageBitmap(bitmap);
+        }else{
+            imageView.setImageBitmap(tmp);
+        }
         nameView.setText(m_oData.get(position).getUser_Name());
         phoneNumView.setText(m_oData.get(position).getPhNumberChanged());
 
@@ -108,15 +123,16 @@ public class ListAdapter extends BaseAdapter {
         if (oBitmap == null)
             return null;
         float width = oBitmap.getWidth();
+        Log.d("size: ", "" + oBitmap.getWidth());
         float height = oBitmap.getHeight();
-        float resizing_size = 120;
+        float resizing_size = 270;
         Bitmap rBitmap = null;
-        if (width > resizing_size){
+        if (width < resizing_size){
             float mWidth = (float) (width/100);
             float fScale = (float) (resizing_size/mWidth);
             width *= (fScale/100);
             height *= (fScale/100);
-        }else if (height > resizing_size){
+        }else if (height < resizing_size){
             float mHeight = (float) (height/100);
             float fScale = (float) (resizing_size/mHeight);
             width *= (fScale/100);

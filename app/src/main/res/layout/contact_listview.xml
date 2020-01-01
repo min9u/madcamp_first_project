@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="75dp">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:id="@+id/contact_phto"/>
+        android:id="@+id/contact_photo"
+        />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="75"
         android:orientation="vertical">
@@ -24,6 +24,7 @@
             android:paddingLeft="10dp"
             android:textStyle="bold"
             android:textColor="#33aabb"
+            android:text="이름"
             />
         <TextView
             android:id="@+id/contact_phonenum"
@@ -32,12 +33,13 @@
             android:layout_weight="40"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
+            android:text="전화번호"
             />
     </LinearLayout>
 
     <Button
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         android:text="전화"
         android:layout_weight="20"
         />
@@ -46,4 +48,4 @@
         android:layout_height="match_parent"
         android:layout_weight="5"
         />
-</RelativeLayout>
+</LinearLayout>

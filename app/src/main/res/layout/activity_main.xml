@@ -9,6 +9,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:id="@+id/tmp_name"
+        />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/tmp_phone"
+        />
     <TabHost
         android:id="@+id/tabHost1"
         android:layout_width="match_parent"
@@ -51,13 +61,21 @@
                         android:textSize="26sp"
                         android:layout_marginRight="8dp"
                         android:id="@+id/textView1"
-                        android:text="SEARCH" />
+                        android:text="SEARCH"
+                        android:textColor="#ffffff"/>
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/textView1"
                         android:id="@+id/editTextFilter"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/nextbtn"
+                        android:text="연락처추가"
+                        android:onClick="OnClickHandler"/>
 
                     <ListView
                         android:layout_width="match_parent"

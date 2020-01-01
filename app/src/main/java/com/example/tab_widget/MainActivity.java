@@ -76,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
     private InputMethodManager imm;
 
+    private TextView tmp_name;
+    private TextView tmp_phone;
+    private ListAdapter adapter;
+    private ArrayList<ContactItem> contactitems = null;
+    private ListView listView;
+
 
 
     @Override
@@ -86,6 +92,22 @@ public class MainActivity extends AppCompatActivity {
         Drawable dog = getResources().getDrawable(R.drawable.dog6);
         Bitmap bitmap = ((BitmapDrawable)dog).getBitmap();
         items.add(new Item(bitmap, "dog"));
+        Drawable dog1 = getResources().getDrawable(R.drawable.dog4);
+        Bitmap bitmap1 = ((BitmapDrawable)dog1).getBitmap();
+        items.add(new Item(bitmap1, "dog"));
+        Drawable dog2 = getResources().getDrawable(R.drawable.dog3);
+        Bitmap bitmap2 = ((BitmapDrawable)dog2).getBitmap();
+        items.add(new Item(bitmap2, "dog"));
+        Drawable dog3 = getResources().getDrawable(R.drawable.dog7);
+        Bitmap bitmap3 = ((BitmapDrawable)dog3).getBitmap();
+        items.add(new Item(bitmap3, "dog"));
+        Drawable dog4 = getResources().getDrawable(R.drawable.dog1);
+        Bitmap bitmap4 = ((BitmapDrawable)dog4).getBitmap();
+        items.add(new Item(bitmap4, "dog"));
+        Drawable dog5 = getResources().getDrawable(R.drawable.dog10);
+        Bitmap bitmap5 = ((BitmapDrawable)dog5).getBitmap();
+        items.add(new Item(bitmap5, "dog"));
+
 
         TabHost tabHost1 = findViewById(R.id.tabHost1) ;
         tabHost1.setup() ;//setup()함수를 호출하지 않으면 TabWidget이 정상적으로 표시되지 않는다
@@ -109,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
         tabHost1.addTab(ts3) ;
 
         //for tab1
-        ArrayList<ContactItem> contactitems = getContactList();
+        contactitems = getContactList();
 
-        ListAdapter adapter = new ListAdapter(this, contactitems);
+        adapter = new ListAdapter(this, contactitems);
 
-        final ListView listView = findViewById(R.id.listview1);
+        listView = findViewById(R.id.listview1);
         listView.setAdapter(adapter);
 
         //for search
@@ -138,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         }) ;
+
+        //for add
 
         //for tab2
 
@@ -217,6 +241,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //연락처 추가화면
+
+
+    public void OnClickHandler(View v){
+
+        Intent intent = new Intent(MainActivity.this,subactivity.class);
+        startActivityForResult(intent, Code.requestCode);
+    }
+
     // 일기 파일 읽기
     private void checkedDay(int year, int monthOfYear, int dayOfMonth) {
 
@@ -290,6 +323,18 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+
+        if(requestCode == Code.requestCode && resultCode == Code.resultCode) {
+            Log.d("ahsdfhsdklfkl","되돌아오긴함");
+            ContactItem tmp_contactItem = new ContactItem();
+            tmp_contactItem.setUser_Name(data.getStringExtra("name"));
+            tmp_contactItem.setUser_phNumber(data.getStringExtra("phone"));
+            Log.d("ahsdfhsdklfkl",""+tmp_contactItem.getUser_Name());
+            contactitems = getContactList();
+            contactitems.add(tmp_contactItem);
+            adapter = new ListAdapter(this, contactitems);
+            listView.setAdapter(adapter);
         }
     }
 
