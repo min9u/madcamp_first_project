@@ -22,6 +22,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -114,8 +116,31 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU);
 
-        ListView listView = findViewById(R.id.listview1);
+        final ListView listView = findViewById(R.id.listview1);
         listView.setAdapter(adapter);
+
+        //for search
+
+        EditText editTextFilter = (EditText)findViewById(R.id.editTextFilter) ;
+        editTextFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable edit) {
+                String filterText = edit.toString();
+                if (filterText.length() > 0) {
+                    listView.setFilterText(filterText) ;
+                } else {
+                    listView.clearTextFilter() ;
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        }) ;
 
         //for tab2
 
