@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -107,14 +109,9 @@ public class MainActivity extends AppCompatActivity {
         tabHost1.addTab(ts3) ;
 
         //for tab1
-        ArrayList<String> LIST_MENU = new ArrayList<>();
-        ArrayList<ContactItem> tmp = getContactList();
+        ArrayList<ContactItem> contactitems = getContactList();
 
-        for(int i = 0; i < tmp.size(); i++) {
-            LIST_MENU.add(i, tmp.get(i).getUser_Name() + " " + tmp.get(i).getUser_phNumber());
-        }
-
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU);
+        ListAdapter adapter = new ListAdapter(this, contactitems);
 
         final ListView listView = findViewById(R.id.listview1);
         listView.setAdapter(adapter);

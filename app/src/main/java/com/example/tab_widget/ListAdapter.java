@@ -1,0 +1,131 @@
+package com.example.tab_widget;
+
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+
+public class ListAdapter extends BaseAdapter {
+    LayoutInflater inflater = null;
+    private ArrayList<ContactItem> m_oData = null;
+    private int nListCnt = 0;
+    private Context mContext;
+
+    public ListAdapter(Context context,ArrayList<ContactItem> _oData)
+    {
+        m_oData = _oData;
+        nListCnt = m_oData.size();
+        this.mContext = context;
+    }
+
+    @Override
+    public int getCount()
+    {
+        Log.i("TAG", "getCount");
+        return nListCnt;
+    }
+
+    @Override
+    public Object getItem(int position)
+    {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position)
+    {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            final Context context = parent.getContext();
+            if (inflater == null)
+            {
+                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            }
+            convertView = inflater.inflate(R.layout.contact_listview, parent, false);
+        }
+
+        ImageView imageView = (ImageView) convertView.findViewById((R.id.contact_phto));
+        TextView nameView = (TextView) convertView.findViewById(R.id.contact_name);
+        TextView phoneNumView = (TextView) convertView.findViewById(R.id.contact_phonenum);
+
+        imageView.setImageBitmap(loadContactPhoto(mContext.getContentResolver(),m_oData.get(position).getPerson_id(),m_oData.get(position).getPhoto_id()));
+        nameView.setText(m_oData.get(position).getUser_Name());
+        phoneNumView.setText(m_oData.get(position).getPhNumberChanged());
+
+
+        return convertView;
+    }
+
+    //to return bitmap contact image
+    public Bitmap loadContactPhoto(ContentResolver cr, long id, long photo_id){
+        Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
+        InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);
+        if (input != null)
+            return resizingBitmap(BitmapFactory.decodeStream(input));
+        else
+            Log.d("PHOTO","first try failed to load photo");
+
+        byte[] photoBytes = null;
+        Uri photoUri = ContentUris.withAppendedId(ContactsContract.Data.CONTENT_URI, photo_id);
+        Cursor c = cr.query(photoUri, new String[]{ContactsContract.CommonDataKinds.Photo.PHOTO},null,null,null );
+        try{
+            if(c.moveToFirst())
+                photoBytes = c.getBlob(0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            c.close();
+        }
+
+        if (photoBytes != null)
+            return resizingBitmap(BitmapFactory.decodeByteArray(photoBytes,0,photoBytes.length));
+        else
+            Log.d("PHOTO","second try also failed");
+        return null;
+    }
+
+    public Bitmap resizingBitmap(Bitmap oBitmap){
+        if (oBitmap == null)
+            return null;
+        float width = oBitmap.getWidth();
+        float height = oBitmap.getHeight();
+        float resizing_size = 120;
+        Bitmap rBitmap = null;
+        if (width > resizing_size){
+            float mWidth = (float) (width/100);
+            float fScale = (float) (resizing_size/mWidth);
+            width *= (fScale/100);
+            height *= (fScale/100);
+        }else if (height > resizing_size){
+            float mHeight = (float) (height/100);
+            float fScale = (float) (resizing_size/mHeight);
+            width *= (fScale/100);
+            height *= (fScale/100);
+        }
+        Log.d("rBitmap",  + width + ", " + height);
+        rBitmap = Bitmap.createScaledBitmap(oBitmap, (int) width, (int) height, true);
+        return  rBitmap;
+    }
+
+
+}
