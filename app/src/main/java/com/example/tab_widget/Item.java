@@ -1,20 +1,19 @@
 package com.example.tab_widget;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 public class Item {
 
-    private Bitmap image;
+    private Uri uri;
     private String imageTitle;
 
-    public Item(Bitmap image, String imageTitle) {
-        this.image = image;
+    public Item(Uri uri, String imageTitle) {
+        this.uri = uri;
         this.imageTitle = imageTitle;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
+    public Uri getUri(){return uri;}
 
     public String getImageTitle() {
         return imageTitle;

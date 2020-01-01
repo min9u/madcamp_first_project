@@ -14,6 +14,7 @@ import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     //dialog in tab2
     View dialogView;
+    View deleteDialogView;
     EditText dlgEdtName;
 
     private final int PERMISSIONS_READ_CONTACTS = 1000;
@@ -89,24 +91,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Drawable dog = getResources().getDrawable(R.drawable.dog6);
-        Bitmap bitmap = ((BitmapDrawable)dog).getBitmap();
-        items.add(new Item(bitmap, "dog"));
-        Drawable dog1 = getResources().getDrawable(R.drawable.dog4);
-        Bitmap bitmap1 = ((BitmapDrawable)dog1).getBitmap();
-        items.add(new Item(bitmap1, "dog"));
-        Drawable dog2 = getResources().getDrawable(R.drawable.dog3);
-        Bitmap bitmap2 = ((BitmapDrawable)dog2).getBitmap();
-        items.add(new Item(bitmap2, "dog"));
-        Drawable dog3 = getResources().getDrawable(R.drawable.dog7);
-        Bitmap bitmap3 = ((BitmapDrawable)dog3).getBitmap();
-        items.add(new Item(bitmap3, "dog"));
-        Drawable dog4 = getResources().getDrawable(R.drawable.dog1);
-        Bitmap bitmap4 = ((BitmapDrawable)dog4).getBitmap();
-        items.add(new Item(bitmap4, "dog"));
-        Drawable dog5 = getResources().getDrawable(R.drawable.dog10);
-        Bitmap bitmap5 = ((BitmapDrawable)dog5).getBitmap();
-        items.add(new Item(bitmap5, "dog"));
+        Resources res = getResources();
+        Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(R.mipmap.dog10) +
+                '/' + res.getResourceTypeName(R.mipmap.dog10) + '/' + res.getResourceEntryName(R.mipmap.dog10));//??????????????????????????
+        items.add(new Item(uri, "강아지"));
+        Uri uri1 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(R.mipmap.dog11) +
+                '/' + res.getResourceTypeName(R.mipmap.dog11) + '/' + res.getResourceEntryName(R.mipmap.dog11));//??????????????????????????
+        items.add(new Item(uri1, "강아지"));
+        Uri uri2 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(R.mipmap.dog12) +
+                '/' + res.getResourceTypeName(R.mipmap.dog12) + '/' + res.getResourceEntryName(R.mipmap.dog12));//??????????????????????????
+        items.add(new Item(uri2, "강아지"));
+        Uri uri3 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(R.mipmap.lion1) +
+                '/' + res.getResourceTypeName(R.mipmap.lion1) + '/' + res.getResourceEntryName(R.mipmap.lion1));//??????????????????????????
+        items.add(new Item(uri3, "사자"));
+        Uri uri4 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(R.mipmap.cat1) +
+                '/' + res.getResourceTypeName(R.mipmap.cat1) + '/' + res.getResourceEntryName(R.mipmap.cat1));//??????????????????????????
+        items.add(new Item(uri4, "고양이"));
+        Uri uri5 = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(R.mipmap.cat2) +
+                '/' + res.getResourceTypeName(R.mipmap.cat2) + '/' + res.getResourceEntryName(R.mipmap.cat2));//??????????????????????????
+        items.add(new Item(uri5, "고양이"));
 
 
         TabHost tabHost1 = findViewById(R.id.tabHost1) ;
@@ -198,6 +201,14 @@ public class MainActivity extends AppCompatActivity {
 
         mLayoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new MyAdapter(items, getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
+
+        //for delete cardView
+        Intent intent = getIntent();
+        int deletePosition = intent.getIntExtra("position", 1);
+        items.remove(deletePosition);
 
         mAdapter = new MyAdapter(items, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
@@ -299,12 +310,10 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 try {
                     // 선택한 이미지에서 비트맵 생성
-                    InputStream in = getContentResolver().openInputStream(data.getData());
-                    final Bitmap img = BitmapFactory.decodeStream(in);
-                    in.close();
+                    final Uri uri = data.getData();
                     // 이미지 표시
 
-                    //카드 제목 입력 받음
+                    //제목 입력 받음
                     dialogView = (View) View.inflate(MainActivity.this, R.layout.dialog1, null);
                     AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
                     dlg.setTitle("그림명 입력");
@@ -314,7 +323,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String tmp = dlgEdtName.getText().toString();
-                            items.add(new Item(img, tmp));
+                            Item item = new Item(uri, tmp);
+                            items.add(item);
                         }
                     });
                     dlg.show();

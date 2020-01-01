@@ -22,6 +22,7 @@
         <activity android:name=".MainActivity" />
 
         <activity android:name=".subactivity"/>
+        <activity android:name=".imageEnlargeActivity"/>
     </application>
 
 
