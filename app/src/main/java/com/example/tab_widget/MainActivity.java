@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tmp_name;
     private TextView tmp_phone;
-    private ListAdapter adapter;
+    private ContactListAdapter adapter;
     private ArrayList<ContactItem> contactitems = null;
     private ListView listView;
 
@@ -130,14 +130,17 @@ public class MainActivity extends AppCompatActivity {
         ts3.setIndicator("Diary") ;
         tabHost1.addTab(ts3) ;
 
+
+
         //for tab1
-        contactitems = getContactList();
+        if (contactitems == null) {
+            contactitems = getContactList();
 
-        adapter = new ListAdapter(this, contactitems);
+            adapter = new ContactListAdapter(this, contactitems);
 
-        listView = findViewById(R.id.listview1);
-        listView.setAdapter(adapter);
-
+            listView = findViewById(R.id.listview1);
+            listView.setAdapter(adapter);
+        }
         //for search
 
         EditText editTextFilter = (EditText)findViewById(R.id.editTextFilter) ;
@@ -331,9 +334,8 @@ public class MainActivity extends AppCompatActivity {
             tmp_contactItem.setUser_Name(data.getStringExtra("name"));
             tmp_contactItem.setUser_phNumber(data.getStringExtra("phone"));
             Log.d("ahsdfhsdklfkl",""+tmp_contactItem.getUser_Name());
-            contactitems = getContactList();
             contactitems.add(tmp_contactItem);
-            adapter = new ListAdapter(this, contactitems);
+            adapter = new ContactListAdapter(this, contactitems);
             listView.setAdapter(adapter);
         }
     }

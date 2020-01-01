@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,13 +26,12 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class ListAdapter extends BaseAdapter {
+public class ContactListAdapter extends BaseAdapter {
     LayoutInflater inflater = null;
     private ArrayList<ContactItem> m_oData = null;
     private int nListCnt = 0;
     private Context mContext;
-
-    public ListAdapter(Context context,ArrayList<ContactItem> _oData)
+    public ContactListAdapter(Context context,ArrayList<ContactItem> _oData)
     {
         m_oData = _oData;
         nListCnt = m_oData.size();
@@ -86,10 +86,14 @@ public class ListAdapter extends BaseAdapter {
         }
         nameView.setText(m_oData.get(position).getUser_Name());
         phoneNumView.setText(m_oData.get(position).getPhNumberChanged());
-
-
         return convertView;
     }
+
+    //button이 눌러졋을 떄 실행되는 onClick함수
+    public  void  onClick(View v){
+
+    }
+
 
     //to return bitmap contact image
     public Bitmap loadContactPhoto(ContentResolver cr, long id, long photo_id){

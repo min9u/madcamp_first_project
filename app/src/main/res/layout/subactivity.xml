@@ -24,7 +24,9 @@
                 android:layout_height="30mm"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/icon_personbig" />
+                android:src="@drawable/icon_personbig"
+                android:onClick="choosePersonImage"
+                android:id="@+id/choosePersonImage"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,8 +43,7 @@
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
                     android:maxWidth="25dp"
-                    android:maxHeight="25dp"
-                    android:src="@drawable/icon_person" />
+                    android:maxHeight="25dp"/>
 
                 <View
                     android:layout_width="0dp"
@@ -66,8 +67,7 @@
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
                     android:maxWidth="25dp"
-                    android:maxHeight="25dp"
-                    android:src="@drawable/icon_person" />
+                    android:maxHeight="25dp"/>
 
                 <EditText
                     android:layout_width="0dp"

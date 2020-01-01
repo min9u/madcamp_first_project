@@ -42,6 +42,7 @@
         android:layout_height="60dp"
         android:text="전화"
         android:layout_weight="20"
+        android:id="@+id/callbutton"
         />
     <View
         android:layout_width="0dp"
